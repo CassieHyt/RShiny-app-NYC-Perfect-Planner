@@ -124,7 +124,7 @@ A shiny app needs two files.
 mh2009.use=
   mh2009%>%
   mutate(sale.month=month(as.Date(SALE.DATE, "%m/%d/%y")))%>%
-  mutate(sale.price=ifelse(SALE.PRICE==0, NA, SALE.PRICE))%>%
+  mutate(sale.price=ifelse(SALE.PRICE==0, NA, SALE.PRICE))%>%# 0 represent NA in this case, other case may be 99, 98 , 97...in social research
   mutate(footage=ifelse(GROSS.SQUARE.FEET==0, NA, GROSS.SQUARE.FEET))%>%
   mutate(unit.price=sale.price/footage)%>%
   mutate(bldg.type=substr(BUILDING.CLASS.CATEGORY, 1, 2))%>%
