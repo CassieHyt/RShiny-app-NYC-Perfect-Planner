@@ -99,7 +99,7 @@ shinyServer(function(input,output){
   })
   
 
-  observeEvent(input$location,{
+  observeEvent(input$submit11,{
     url = paste0('http://maps.google.com/maps/api/geocode/xml?address=',input$location,'&sensor=false')
     doc = xmlTreeParse(url) 
     root = xmlRoot(doc) 

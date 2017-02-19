@@ -25,7 +25,7 @@ shinyUI(navbarPage(theme = shinytheme("flatly"),
                                               
                                               helpText("Choose Your Location"),
                                               textInput("location","Your Location:","Columbia University NY"),
-                                              actionButton("location","Mark"),style="opacity: 0.5",
+                                              actionButton("submit11","Mark"),style="opacity: 0.5",
                                               textOutput("lo"),
                                               selectInput('choice1', 'Chioce 1:',Selection),
                                               selectInput('choice2', 'Chioce 2:',Selection),
