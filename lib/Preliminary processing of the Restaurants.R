@@ -2,7 +2,7 @@ library(ggmap)
 require(RJSONIO)
 ###Load the data
 ##NYC_Resteraunts.csv is the raw data from the website, which we don't include in our data file
-Data<-read.csv("./Restaurants_Raw.csv.csv",header = T,as.is = T,encoding = "UTF-8")
+Data<-read.csv("../data/Restaurants_Raw.csv.csv",header = T,as.is = T,encoding = "UTF-8")
 
 #############################################################################
 #The following code is for re-assigning the resteraunt type
@@ -79,4 +79,4 @@ Data$LAT<-corodi$LAT
 Data<-Data[,-c(1,4,5)]
 Data<-na.omit(Data)
 
-write.csv(Data,"./Restaurant.csv")
+#write.csv(Data,"../data/Restaurant.csv")
