@@ -1,21 +1,25 @@
 ##Load Testing
+##Selection<-c("Deli","Supermarket","Library","Theater","Resteranut","Musemu") 
 #Deli<-read.csv("../data/Deli.csv")
 #Supermarket<-read.csv("../data/Market.csv")
 #colnames(Deli)[c(14,15)]<-c("LON","LAT")
 #colnames(Supermarket)[c(14,15)]<-c("LON","LAT")
 
+library(geosphere)
 
-
-Selection<-c("Deli","Supermarket","Library","Theater","Resteranut","Musemu") 
-
+##Get Index for candidates
 get_Ind<-function(data,Lon0,Lat0,r){
-  dis<-(data$LON-Lon0)^2+(data$LAT-Lat0)^2
-  Ind<-dis<r^2
+  coords<-cbind(data$LON,data$LAT)
+  dis<-distm(coords,c(Lon0,Lat0), fun = distHaversine)
+  Ind<-dis<r
   return(list(dis=dis,Ind=Ind))
 }
 
+##Get data:
 get_candidate<-function(data,Lon0,Lat0,r){
-  Ind<-(data$LON-Lon0)^2+(data$LAT-Lat0)^2<r^2
+  coords<-cbind(data$LON,data$LAT)
+  dis<-distm(coords,c(Lon0,Lat0), fun = distHaversine)
+  Ind<-dis<r
   return(data[Ind,])
 }
 
@@ -49,18 +53,26 @@ get_center<-function(choice1,choice2,choice3,Lon0,Lat0,distance,radius){
     output_data<-D1
   }
   
+  ##Culculate distance between choices
+  coords1<-D1[,c("LON","LAT")]
+  coords2<-D2[,c("LON","LAT")]
+  coords3<-D2[,c("LON","LAT")]
+  Dis2<-distm(coords1,coords2, fun = distHaversine)
+  Dis3<-distm(coords1,coords3, fun = distHaversine)
+  Inx2<-Dis2<r
+  Inx3<-Dis3<r
+  Candidate1<-I[!(colSums(Inx)==0)]
+  Inx<-0
   
+  wei<-matrix(1:6,nrow=2)
+  which.max(wei)
+  e<-wei<5
+  wei[e]
   ##If the user only select "Choice1" and "Choice2"
   if (!null2 & null3){
-    for(i in 1:I){
-      with2<-get_Ind(D2,D1[i,"LON"],D1[i,"LAT"],r=radius)
-      IN2<-with2$Ind
-      if (sum(IN2,na.rm=T)!=0){
-        Ans1<-c(Ans1,i)
-        #Ans2<-rbind(Ans2,IN2)
-        #Ans3<-rbind(Ans2,IN2)
-      }
-    }
+    Candidate1<-I[!(colSums(Inx2)=0)]
+    distance<-which.min(Dis2)
+##############################################################################2.15Íí    
     output_data<-D1[Ans1,]
   } 
   if(!null2 & !null3){
