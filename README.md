@@ -14,8 +14,8 @@ Term: Spring 2017
 	+ Zeyu Gan
 	+ Zixuan Guan
 
-![screenshot](doc/screenshot_firstpage.jpg)
-![screenshot](doc/map_screenshot.jpg)
+![screenshot](doc/screenshot_firstpage.png)
+![screenshot](doc/map_screenshot.png)
 
 
 **Do you have allodoxaphobia?** 
