@@ -24,9 +24,9 @@ Term: Spring 2017
 
 **Do you have trouble with finding places for your favorite activity?** 
 
-**If “Yes”, here is Your Savior!!** 
 
-APP Link:[lalalalla]( https://nycopendata.socrata.com/).
+**If “Yes”, here is Your Savior!!** 
++ **Try our APP via Link:[lalalalla]( https://nycopendata.socrata.com/)**
 
 
 
