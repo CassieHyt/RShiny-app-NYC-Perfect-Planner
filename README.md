@@ -1,34 +1,41 @@
 # Project 2: Open Data App - an RShiny app development project
 
-### [Project Description](doc/project2_desc.md)
+## Project Title: Perfect Planner: Plan for your perfect day
+
+Term: Spring 2017
+
++ Team 14
++ **Perfect Planner: Plan for your perfect day**: + Team members
+	+ Jihan Wei
+	+ Shuyi Tang
+	+ Yitong Hu
+	+ Zeyu Gan
+	+ Zixuan Guan
 
 ![screenshot](doc/map_screenshot.jpg)
 
-In this second project of GU4243/GR5243 Applied Data Science, we develop an *Exploratory Data Analysis and Visualization* shiny app on a topic of your choice using U.S. government open data released on the [data.gov](https://data.gov/) website. See [Project 2 Description](project2_desc.md) for more details.  
 
-The **learning goals** for this project is:
++ ** Do you have allodoxaphobia? **:
++ ** Do you have trouble with deciding how to spend your spare time? **:
++ ** Do you have trouble with finding places for your favorite activity? **:
 
-- business intelligence for data science
-- data cleaning
-- data visualization
-- systems development/design life cycle
-- shiny app/shiny server
++ **If “Yes”**
++ ** Here is Your Savior!!**:
 
-*The above general statement about project 2 can be removed once you are finished with your project. It is optional.
 
-## Project Title: Perfect Planner
-                                 ---Plan for your perfect day
-Term: Spring 2017
 
-+ Team #
-+ **Perfect Planner: Plan for your perfect day**: + Team members
-	+ team member 1
-	+ team member 2
-	+ team member 3
-	+ team member 4
-	+ team member 5
++ **Summary**:
+Image that on the morning of a sunny weekend, you want to go out for fun but have no idea about what to do or you have plenty of preferences in heart but can’t find a place to fulfill all your needs. Under such unpleasant situations, our app can save you out~
 
-+ **Project summary**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+In our app, after entering your current location, you can choose your top 3 “Most want-to-go places” to search for recommended areas that contain all your choices. Among all the recommendations, you can zoom in to have more detailed information about that area and then decide where to start your perfect day!
+
+Opps! If you currently have no idea of what to do, don’t worry! Our app can even randomly choose them for you~
+
+
+
++ **Data Source**:
+We mainly use U.S. government open data released on the [data.gov](https://data.gov/) website for building this shiny app. And the Deli and Market data can be found on the [NYC open data]( https://nycopendata.socrata.com/). 
+
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
 
