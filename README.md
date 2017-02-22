@@ -26,8 +26,7 @@ Term: Spring 2017
 
 
 **If “Yes”, here is Your Savior!!** 
-+ **Try our APP via Link:[lalalalla]( https://nycopendata.socrata.com/)**
-
++ **Try our App [Perfect Planner] via Link: https://adsproj2group14.shinyapps.io/perfectplanner/**
 
 
 + **Summary**: 
