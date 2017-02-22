@@ -78,8 +78,8 @@ shinyUI(navbarPage(theme = "bootstrap.min-copy.css","Perfect Planner",id="nav",
                    
                    tabPanel("Random Choice",div(id="canvas"),
                             mainPanel(
-                              actionButton("submit3", label="choose for you",style="opacity:0.5",align="left"),
-                              actionButton("submit4", label="finished!",style="opacity:0.5",align="left"),
+                              actionButton("submit3", label="choose for you",style="opacity:0.8",align="left"),
+                              actionButton("submit4", label="finished!",style="opacity:0.8",align="left"),
                               
                               div(
                                 h4("Your first choice?"),
