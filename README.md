@@ -1,4 +1,4 @@
-# Project 2: Open Data App - an RShiny app development project
+ # Project 2: Open Data App - an RShiny app development project
 
 ## Project Title: Perfect Planner ---Plan for your perfect day
 
@@ -50,8 +50,8 @@ Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by
 
 ```
 proj/
-├── app/ (all files for running the app)
-├── lib/ (all R files)
+├── app/  (all files for running the app)
+├── lib/  (all R files)
 ├── data/ (all the raw data and clearned data)
 ├── doc/  (all indirectly used R file and pictures for readme)
 └── output/ 
