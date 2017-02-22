@@ -1,4 +1,4 @@
- # Project 2: Open Data App - an RShiny app development project
+# Project 2: Open Data App - an RShiny app development project
 
 ## Project Title: Perfect Planner ---Plan for your perfect day
 
