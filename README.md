@@ -15,16 +15,16 @@ Term: Spring 2017
 ![screenshot](doc/map_screenshot.jpg)
 
 
-+ ** Do you have allodoxaphobia? **:
-+ ** Do you have trouble with deciding how to spend your spare time? **:
-+ ** Do you have trouble with finding places for your favorite activity? **:
++ **Do you have allodoxaphobia?**:
++ **Do you have trouble with deciding how to spend your spare time?**:
++ **Do you have trouble with finding places for your favorite activity?**:
 
 + **If “Yes”**
-+ ** Here is Your Savior!!**:
++ **Here is Your Savior!!**:
 
 
 
-+ **Summary**:
++ **Summary**: +
 Image that on the morning of a sunny weekend, you want to go out for fun but have no idea about what to do or you have plenty of preferences in heart but can’t find a place to fulfill all your needs. Under such unpleasant situations, our app can save you out~
 
 In our app, after entering your current location, you can choose your top 3 “Most want-to-go places” to search for recommended areas that contain all your choices. Among all the recommendations, you can zoom in to have more detailed information about that area and then decide where to start your perfect day!
@@ -33,8 +33,7 @@ Opps! If you currently have no idea of what to do, don’t worry! Our app can ev
 
 
 
-+ **Data Source**:
-We mainly use U.S. government open data released on the [data.gov](https://data.gov/) website for building this shiny app. And the Deli and Market data can be found on the [NYC open data]( https://nycopendata.socrata.com/). 
++ **Data Source**: We mainly use U.S. government open data released on the [data.gov](https://data.gov/) website for building this shiny app. And the Deli and Market data can be found on the [NYC open data]( https://nycopendata.socrata.com/). 
 
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
