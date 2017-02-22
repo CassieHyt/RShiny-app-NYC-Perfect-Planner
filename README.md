@@ -2,7 +2,7 @@
 
 ### [Project Description](doc/project2_desc.md)
 
-![screenshot](doc/screenshot2.png)
+![screenshot](doc/map_screenshot.jpg)
 
 In this second project of GU4243/GR5243 Applied Data Science, we develop an *Exploratory Data Analysis and Visualization* shiny app on a topic of your choice using U.S. government open data released on the [data.gov](https://data.gov/) website. See [Project 2 Description](project2_desc.md) for more details.  
 
@@ -16,11 +16,12 @@ The **learning goals** for this project is:
 
 *The above general statement about project 2 can be removed once you are finished with your project. It is optional.
 
-## Project Title Lorem ipsum dolor sit amet
+## Project Title: Perfect Planner
+                                 ---Plan for your perfect day
 Term: Spring 2017
 
 + Team #
-+ **Projec title**: + Team members
++ **Perfect Planner: Plan for your perfect day**: + Team members
 	+ team member 1
 	+ team member 2
 	+ team member 3
