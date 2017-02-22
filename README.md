@@ -1,11 +1,13 @@
 # Project 2: Open Data App - an RShiny app development project
 
-## Project Title: Perfect Planner: Plan for your perfect day
+## Project Title: Perfect Planner ---Plan for your perfect day
 
 Term: Spring 2017
 
 + Team 14
-+ **Perfect Planner: Plan for your perfect day**: + Team members
++ **Perfect Planner ---Plan for your perfect day**
+
++ **Team members**
 	+ Jihan Wei
 	+ Shuyi Tang
 	+ Yitong Hu
@@ -15,21 +17,22 @@ Term: Spring 2017
 ![screenshot](doc/map_screenshot.jpg)
 
 
-+ **Do you have allodoxaphobia?**:
-+ **Do you have trouble with deciding how to spend your spare time?**:
-+ **Do you have trouble with finding places for your favorite activity?**:
+**Do you have allodoxaphobia?** 
 
-+ **If “Yes”**
-+ **Here is Your Savior!!**:
+**Do you have trouble with deciding how to spend your spare time?** 
+
+**Do you have trouble with finding places for your favorite activity?** 
+
+**If “Yes”, here is Your Savior!!**: APP Link:[lalalalla]( https://nycopendata.socrata.com/).
 
 
 
-+ **Summary**: +
-Image that on the morning of a sunny weekend, you want to go out for fun but have no idea about what to do or you have plenty of preferences in heart but can’t find a place to fulfill all your needs. Under such unpleasant situations, our app can save you out~
++ **Summary**: 
++ Image that on the morning of a sunny weekend, you want to go out for fun but have no idea about what to do or you have plenty of preferences in heart but can’t find a place to fulfill all your needs. Under such unpleasant situations, our app can save you out~
 
-In our app, after entering your current location, you can choose your top 3 “Most want-to-go places” to search for recommended areas that contain all your choices. Among all the recommendations, you can zoom in to have more detailed information about that area and then decide where to start your perfect day!
++ In our app, after entering your current location, you can choose your top 3 “Most want-to-go places” to search for recommended areas that contain all your choices. Among all the recommendations, you can zoom in to have more detailed information about that area and then decide where to start your perfect day!
 
-Opps! If you currently have no idea of what to do, don’t worry! Our app can even randomly choose them for you~
++ Opps! If you currently have no idea of what to do, don’t worry! Our app can even randomly choose them for you~
 
 
 
