@@ -1,3 +1,15 @@
+packages.used=c("leaflet","geosphere","ggmap","RJSONIO","shiny","corrgram","plyr","ggplot2","shinydashboard","shinythemes","XML")
+
+# check packages that need to be installed.
+packages.needed=setdiff(packages.used, 
+                        intersect(installed.packages()[,1], 
+                                  packages.used))
+# install additional packages
+if(length(packages.needed)>0){
+  install.packages(packages.needed, dependencies = TRUE)
+}
+
+
 library(leaflet)
 library(geosphere)
 library(ggmap)
@@ -6,35 +18,25 @@ library(shiny)
 library(corrgram)
 library(plyr)
 library(ggplot2)
-library(shiny)
 library(shinydashboard)
-library(leaflet)
 library(shinythemes)
 library(XML)
 
-Deli<-na.omit(read.csv("C:/Users/Jihan Wei/Desktop/data/Deli.csv",header=T))
+Deli<-na.omit(read.csv("../data/Deli.csv",header=T))
 Deli$URL<-"Unavailable"
-Market<-na.omit(read.csv("C:/Users/Jihan Wei/Desktop/data/Market.csv",header=T))
+Market<-na.omit(read.csv("../data/Market.csv",header=T))
 Market$URL<-"Unavailable"
-Gallery<-na.omit(read.csv("C:/Users/Jihan Wei/Desktop/data/Gallery.csv",header=T))
-Library<-na.omit(read.csv("C:/Users/Jihan Wei/Desktop/data/Library.csv",header=T))
-Museum<-na.omit(read.csv("C:/Users/Jihan Wei/Desktop/data/Museum.csv",header=T))
-Restaurant<-na.omit(read.csv("C:/Users/Jihan Wei/Desktop/data/Restaurant.csv",header=T))
+Gallery<-na.omit(read.csv("../data/Gallery.csv",header=T))
+Library<-na.omit(read.csv("../data/Library.csv",header=T))
+Museum<-na.omit(read.csv("../data/Museum.csv",header=T))
+Restaurant<-na.omit(read.csv("../data/Restaurant.csv",header=T))
 Restaurant$URL<-"Unavailable"
-Theater<-na.omit(read.csv("C:/Users/Jihan Wei/Desktop/data/Theater.csv",header=T))
+Theater<-na.omit(read.csv("../data/Theater.csv",header=T))
 all_data<-list(Deli=Deli,Market=Market,Gallery=Gallery,Library=Library,Museum=Museum,Restaurant=Restaurant,Theater=Theater)
 
 Type<-as.character(unique(Restaurant$TYPE))
-Selection=list(N.A="N.A",Market="Market",Deli="Deli",Library="Library",Theater="Theater",Musemu="Musemu",Gallery="Gallery",Restaurant=Type)
+Selection=list(N.A="N.A",Market="Market",Deli="Deli",Library="Library",Theater="Theater",Museum="Museum",Gallery="Gallery",Restaurant=Type)
 
-myIcons <- iconList(
-  Museum = makeIcon("museum.png", 18, 18),
-  Theater = makeIcon("theater.png", 18, 18),
-  Deli=makeIcon("deli.png", 18, 18),
-  Restaurant=makeIcon("restaurant.png", 18, 18),
-  Library=makeIcon("library.png", 18, 18),
-  Supermarket=makeIcon("supermarket.png", 18, 18)
-)
 
 
 
@@ -85,7 +87,7 @@ get_center<-function(choice1,choice2,choice3,Lon0,Lat0,distance,radius){
   null2<-is.na(choice2)
   null3<-is.na(choice3)
   
-  ##If the user only select "Choice1" 
+  ##If the user only select "Choice1"
   if (null2 & null3){
     data_candidate<-all_data[[choice1]]
     ##Get candidates according to the radius:

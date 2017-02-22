@@ -1,121 +1,207 @@
+library(leaflet)
 library(shiny)
-library(choroplethr)
-library(choroplethrZip)
-library(dplyr)
 
-## Define Manhattan's neighborhood
-man.nbhd=c("all neighborhoods", "Central Harlem", 
-           "Chelsea and Clinton",
-           "East Harlem", 
-           "Gramercy Park and Murray Hill",
-           "Greenwich Village and Soho", 
-           "Lower Manhattan",
-           "Lower East Side", 
-           "Upper East Side", 
-           "Upper West Side",
-           "Inwood and Washington Heights")
-zip.nbhd=as.list(1:length(man.nbhd))
-zip.nbhd[[1]]=as.character(c(10026, 10027, 10030, 10037, 10039))
-zip.nbhd[[2]]=as.character(c(10001, 10011, 10018, 10019, 10020))
-zip.nbhd[[3]]=as.character(c(10036, 10029, 10035))
-zip.nbhd[[4]]=as.character(c(10010, 10016, 10017, 10022))
-zip.nbhd[[5]]=as.character(c(10012, 10013, 10014))
-zip.nbhd[[6]]=as.character(c(10004, 10005, 10006, 10007, 10038, 10280))
-zip.nbhd[[7]]=as.character(c(10002, 10003, 10009))
-zip.nbhd[[8]]=as.character(c(10021, 10028, 10044, 10065, 10075, 10128))
-zip.nbhd[[9]]=as.character(c(10023, 10024, 10025))
-zip.nbhd[[10]]=as.character(c(10031, 10032, 10033, 10034, 10040))
+source("../lib/global.R")
+namedata<-c("Deli","Museum","Theater","Gallery","Library","Market")
 
-## Load housing data
-load("../output/count.RData")
-load("../output/mh2009use.RData")
 
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-  
-  ## Neighborhood name
-  output$text = renderText({"Selected:"})
-  output$text1 = renderText({
-      paste("{ ", man.nbhd[as.numeric(input$nbhd)+1], " }")
-  })
-  
-  ## Panel 1: summary plots of time trends, 
-  ##          unit price and full price of sales. 
-  
-  output$distPlot <- renderPlot({
+shinyServer(function(input,output){
+  output$map <- renderLeaflet({
+    map <- leaflet() %>%  addTiles(
+      urlTemplate = "https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZnJhcG9sZW9uIiwiYSI6ImNpa3Q0cXB5bTAwMXh2Zm0zczY1YTNkd2IifQ.rjnjTyXhXymaeYG6r2pclQ",
+      attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>' )  %>% setView(-73.983,40.7639,zoom = 13)
     
-    ## First filter data for selected neighborhood
-    mh2009.sel=mh2009.use
-    if(input$nbhd>0){
-      mh2009.sel=mh2009.use%>%
-                  filter(region %in% zip.nbhd[[as.numeric(input$nbhd)]])
+    for (i in 1:length(namedata)){
+      leafletProxy("map",data=all_data[[namedata[i]]]) %>%
+        addMarkers(clusterOptions = markerClusterOptions(),
+                   lng=all_data[[namedata[i]]]$LON,lat=all_data[[namedata[i]]]$LAT,
+                   icon=list(iconUrl=paste('icon/',namedata[i],'.png',sep = ""),iconSize=c(20,20)),
+                   popup=paste("Name:",all_data[[namedata[i]]]$NAME,"<br/>",
+                               "Tel:",all_data[[namedata[i]]]$TEL,"<br/>",
+                               "Zipcode:",all_data[[namedata[i]]]$ZIP,"<br/>",
+                               "Website:",a(all_data[[namedata[i]]]$URL, href = all_data[[namedata[i]]]$URL),"<br/>", # warning appears
+                               "Address:",all_data[[namedata[i]]]$ADDRESS),
+                   group=namedata[i] )
     }
     
-    ## Monthly counts
-    month.v=as.vector(table(mh2009.sel$sale.month))
+    Type<-as.character(unique(Restaurant$TYPE))
+    Group<-c("Dessert","American","QuickMeal","Seafood","Italian","Asian","Mexcian","Chinese","Other","European","French")
+    for (i in 1:11){
+      leafletProxy("map",data=Restaurant[Restaurant$TYPE==Type[i],]) %>%
+        addMarkers(clusterOptions = markerClusterOptions(),
+                   lng=Restaurant[Restaurant$TYPE==Type[i],]$LON,lat=Restaurant[Restaurant$TYPE==Type[i],]$LAT,
+                   icon=list(iconUrl='icon/Restaurant.png',iconSize=c(20,20)),
+                   popup=paste("Name:",Restaurant[Restaurant$TYPE==Type[i],]$NAME,"<br/>",
+                               "District:",Restaurant[Restaurant$TYPE==Type[i],]$DISTRICT,"<br/>",
+                               "Type:",Restaurant[Restaurant$TYPE==Type[i],]$TYPE,"<br/>",
+                               "Address:",Restaurant[Restaurant$TYPE==Type[i],]$ADDRESS),
+                   group=Group[i] )
+    }
+    map%>%hideGroup(c("Deli","Museum","Gallery","Library","Market","Dessert","American","QuickMeal","Seafood","Italian","Asian","Mexcian","Chinese","Other","European","French"))
     
-    ## Price: unit (per sq. ft.) and full
-    type.price=data.frame(bldg.type=c("10", "13", "25", "28"))
-    type.price.sel=mh2009.sel%>%
-                group_by(bldg.type)%>%
-                summarise(
-                  price.mean=mean(sale.price, na.rm=T),
-                  price.median=median(sale.price, na.rm=T),
-                  unit.mean=mean(unit.price, na.rm=T),
-                  unit.median=median(unit.price, na.rm=T),
-                  sale.n=n()
-                )
-    type.price=left_join(type.price, type.price.sel, by="bldg.type")
     
-    ## Making the plots
-    layout(matrix(c(1,1,1,1,2,2,3,3,2,2,3,3), 3, 4, byrow=T))
-    par(cex.axis=1.3, cex.lab=1.5, 
-        font.axis=2, font.lab=2, col.axis="dark gray", bty="n")
-    
-    ### Sales monthly counts
-    plot(1:12, month.v, xlab="Months", ylab="Total sales", 
-         type="b", pch=21, col="black", bg="red", 
-         cex=2, lwd=2, ylim=c(0, max(month.v,na.rm=T)*1.05))
-    
-    ### Price per square foot
-    plot(c(0, max(type.price[,c(4,5)], na.rm=T)), 
-         c(0,5), 
-         xlab="Price per square foot", ylab="", 
-         bty="l", type="n")
-    text(rep(0, 4), 1:4+0.5, paste(c("coops", "condos", "luxury hotels", "comm. condos"), 
-                                  type.price$sale.n, sep=": "), adj=0, cex=1.5)
-    points(type.price$unit.mean, 1:nrow(type.price), pch=16, col=2, cex=2)
-    points(type.price$unit.median, 1:nrow(type.price),  pch=16, col=4, cex=2)
-    segments(type.price$unit.mean, 1:nrow(type.price), 
-              type.price$unit.median, 1:nrow(type.price),
-             lwd=2)    
-    
-    ### full price
-    plot(c(0, max(type.price[,-1], na.rm=T)), 
-         c(0,5), 
-         xlab="Sales Price", ylab="", 
-         bty="l", type="n")
-    text(rep(0, 4), 1:4+0.5, paste(c("coops", "condos", "luxury hotels", "comm. condos"), 
-                                   type.price$sale.n, sep=": "), adj=0, cex=1.5)
-    points(type.price$price.mean, 1:nrow(type.price), pch=16, col=2, cex=2)
-    points(type.price$price.median, 1:nrow(type.price),  pch=16, col=4, cex=2)
-    segments(type.price$price.mean, 1:nrow(type.price), 
-             type.price$price.median, 1:nrow(type.price),
-             lwd=2)    
   })
   
-  ## Panel 2: map of sales distribution
-  output$distPlot1 <- renderPlot({
-    count.df.sel=count.df
-    if(input$nbhd>0){
-      count.df.sel=count.df%>%
-        filter(region %in% zip.nbhd[[as.numeric(input$nbhd)]])
-    }
-    # make the map for selected neighhoods
+  
+  observeEvent(input$submit,{
+    url = paste0('http://maps.google.com/maps/api/geocode/xml?address=',input$location,'&sensor=false')
+    doc = xmlTreeParse(url) 
+    root = xmlRoot(doc) 
+    lat = as.numeric(xmlValue(root[['result']][['geometry']][['location']][['lat']])) 
+    long = as.numeric(xmlValue(root[['result']][['geometry']][['location']][['lng']]))
     
-    zip_choropleth(count.df.sel,
-                   title       = "2009 Manhattan housing sales",
-                   legend      = "Number of sales",
-                   county_zoom = 36061)
+    leafletProxy("map") %>%
+      clearMarkers() %>%
+      #      addMarkers(data=address(),~longitude,lat=latitude)
+      addMarkers(lng=long,lat=lat)
   })
+  
+  observeEvent(input$choice1,{
+    leafletProxy("map") %>%
+         showGroup(input$choice1)
+    
+  })    
+  
+  observeEvent(input$choice2,{
+    if("NA" == input$choice2){leafletProxy("map")%>%showGroup(input$choice1)}
+    else {leafletProxy("map")%>%
+        hideGroup(c("Deli","Museum","Theater","Gallery","Library","Market","Dessert","American","QuickMeal","Seafood","Italian","Asian","Mexcian","Chinese","Other","European","French"))%>%
+        showGroup(c(input$choice1,input$choice2))}
+  })
+  
+  
+  
+  observeEvent(input$choice3,{
+    if("NA" == input$choice3){leafletProxy("map")%>%showGroup(c(input$choice1,input$choice2))}
+    else {leafletProxy("map")%>%
+        hideGroup(c("Deli","Museum","Theater","Gallery","Library","Market","Dessert","American","QuickMeal","Seafood","Italian","Asian","Mexcian","Chinese","Other","European","French"))%>%
+        showGroup(c(input$choice1,input$choice2,input$choice3))}
+  })
+  
+  
+
+  
+  observeEvent(input$update,{
+    ########Get My Location Value:
+    url = paste0('http://maps.google.com/maps/api/geocode/xml?address=',input$location,'&sensor=false')
+    doc = xmlTreeParse(url) 
+    root = xmlRoot(doc) 
+    lat = as.numeric(xmlValue(root[['result']][['geometry']][['location']][['lat']])) 
+    long = as.numeric(xmlValue(root[['result']][['geometry']][['location']][['lng']]))
+    
+    
+    #######select cadidates:
+    if (input$choice2=="N.A"){
+      center_candidate<-get_center(input$choice1,NA,NA,long,lat,input$distance,input$radius)
+    }
+    
+    if(!input$choice2=="N.A" & input$choice3=="N.A"){
+      center_candidate<-get_center(input$choice1,input$choice2,NA,long,lat,input$distance,input$radius)
+    }
+    
+    
+    if (!input$choice2=="N.A" & !input$choice3=="N.A"){
+      
+      center_candidate<-get_center(input$choice1,input$choice2,input$choice3,long,lat,input$distance,input$radius)
+      
+    }
+    center_candidate<-na.omit(center_candidate)
+    
+    if(mode(center_candidate)=="character"){
+      output$c1<-renderPrint(center_candidate)
+    } else{
+      number<-nrow(center_candidate)
+      if(number>5){
+        ran<-sample(number,5,replace = FALSE)
+        center_candidate<-center_candidate[ran,]
+        number<-5
+      }
+      
+      color<-c("red","purple","yellow","green","blue")
+  
+      answer<-as.list(1:number)
+      
+      for(i in 1:number){
+        answer[[i]]<-as.data.frame(t(center_candidate[i,c("NAME","ADDRESS","TEL")]))
+        rownames(answer[[i]])<-c("Names","Address","Telephone")
+        colnames(answer[[i]])<-NULL
+      }
+      
+      output$c1<-renderPrint(
+        for(j in 1:number){
+          cat(paste("Option",j,":"))
+          print(answer[[j]])
+          cat("\n")
+        })
+      
+      LONs<-c(center_candidate[,c("LON")])
+      LATs<-c(center_candidate[,c("LAT")])
+      
+      ce<-input$choice1
+      
+      leafletProxy('map')%>%
+        clearShapes()%>%
+        addCircleMarkers(lng = LONs[1:number],lat=LATs[1:number],radius=input$radius*20,col=color[1:number],group="circles")
+      
+    }
+    
+    #####Zoom-In
+    observeEvent(input$zoom_1, {
+      leafletProxy('map') %>%
+        setView("map",lat=LATs[1],lng=LONs[1],zoom=520)
+    },ignoreInit=T,once = T)
+    
+    
+    observeEvent(input$zoom_2, {
+      leafletProxy('map') %>%
+        setView("map",lat=LATs[2],lng=LONs[2],zoom=520)
+    },ignoreInit=T,once = T)
+    
+    observeEvent(input$zoom_3, {
+      leafletProxy('map') %>%
+        setView("map",lat=LATs[3],lng=LONs[3],zoom=520)
+    },ignoreInit=T,once = T)
+    
+    observeEvent(input$zoom_4, {
+      leafletProxy('map') %>%
+        setView("map",lat=LATs[4],lng=LONs[4],zoom=520)
+    },ignoreInit=T,once = T)
+    
+    observeEvent(input$zoom_5, {
+      leafletProxy('map') %>%
+        setView("map",lat=LATs[5],lng=LONs[5],zoom=520)
+    },ignoreInit=T,once = T)
+    
+  })
+  
+  observeEvent(input$submit3,{
+    output$plot1<-renderImage({
+      filename <- normalizePath(file.path('../app/www/img/dice.gif'))
+      # Return a list containing the filename and alt text
+      list(src = filename)
+    },deleteFile = FALSE)
+  })
+  
+  observeEvent(input$submit4,{
+    output$plot1<-renderImage({
+      filename <- normalizePath(file.path('../app/www/img/bg2.png'))
+      # Return a list containing the filename and alt text
+      list(src = filename)
+    },deleteFile = FALSE)
+    index<-sample(1:7,3,replace=F)
+    index1<-sample(1:100,1)/10
+    choice<-c("Restaurant","Theater","Deli","Market","Museum","Gallery","Library")
+    output$c5<- renderText({choice[index[1]]})
+    output$c2<- renderText({choice[index[2]]})
+    output$c3<- renderText({choice[index[3]]})
+  })
+ 
+  ##Clear
+  observeEvent(input$clear, {
+    leafletProxy('map') %>% clearGroup("circles")
+    leafletProxy("map")%>%hideGroup(c("Deli","Museum","Theater","Gallery","Library","Market","Dessert","American","QuickMeal","Seafood","Italian","Asian","Mexcian","Chinese","Other","European","French"))
+    leafletProxy('map')%>% setView(-73.983,40.7639,zoom = 13)
+    output$c1<-renderText(" ")
+  })
+  
 })
